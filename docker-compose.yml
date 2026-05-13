@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "7860:7860"
+    environment:
+      - HF_TOKEN=${HF_TOKEN:-}
+      - NVIDIA_API_KEY=${NVIDIA_API_KEY:-}
+      - LLM_PROVIDER=${LLM_PROVIDER:-nvidia}
+      - LLM_MODEL=${LLM_MODEL:-meta/llama-3.1-70b-instruct}
+      - STT_TIMEOUT=15
+      - LLM_TIMEOUT=20
+      - TTS_TIMEOUT=15
+      - PIPELINE_TIMEOUT=30
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8501:7860"
+    environment:
+      - API_URL=http://backend:7860
+    depends_on:
+      - backend
