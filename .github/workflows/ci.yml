@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  compile:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -18,3 +18,5 @@ jobs:
           python-version: '3.11'
       - name: Compile backend source
         run: python -m compileall -q backend/app
+      - name: Run unit tests
+        run: python -m unittest discover -s backend/tests
