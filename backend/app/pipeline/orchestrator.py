@@ -2,7 +2,8 @@ import asyncio
 import io
 import time
 import wave
-import concurrent.futures`nfrom concurrent.futures import ThreadPoolExecutor
+import concurrent.futures
+from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 
 from ..config import settings
