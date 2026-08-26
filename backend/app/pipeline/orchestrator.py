@@ -2,7 +2,7 @@ import asyncio
 import io
 import time
 import wave
-from concurrent.futures import ThreadPoolExecutor
+import concurrent.futures`nfrom concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 
 from ..config import settings
@@ -105,7 +105,8 @@ def run_with_timeout(fn, timeout: float, *args, **kwargs):
     future = _executor.submit(fn, *args, **kwargs)
     try:
         return future.result(timeout=timeout)
-    except Exception as e:
+    except concurrent.futures.TimeoutError as e:
+        future.cancel()
         raise TimeoutError(f"Timed out after {timeout}s") from e
 
 
