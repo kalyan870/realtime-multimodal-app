@@ -1,38 +1,37 @@
 # Real-Time Multimodal Voice Assistant
 
-A real-time multimodal assistant that combines voice interaction, retrieval-augmented generation, and OpenRouter-powered language models in a containerized application.
+An interactive voice-and-text assistant built with a Streamlit UI and FastAPI backend. It can use Hugging Face speech recognition, an OpenRouter or NVIDIA language model, and gTTS speech synthesis.
 
 ## Overview
 
-This project explores a practical voice-first AI workflow: capture user input, process speech, retrieve relevant context, generate an answer, and stream the interaction back to the user.
+The current implementation accepts text or an uploaded audio file, optionally transcribes audio, sends the resulting prompt to a configured language model, and can return generated speech. Requests use a synchronous request/response flow; token streaming and retrieval are not implemented in the current pipeline.
 
 ## Core capabilities
 
-- Real-time voice assistant interaction
-- Multimodal input and response workflow
-- LLM integration through OpenRouter
-- Retrieval-Augmented Generation architecture
+- Text input and uploaded-audio interaction
+- Optional speech-to-text through Hugging Face Inference
+- LLM integration through OpenRouter or NVIDIA
+- Optional speech output through gTTS
 - Containerized local development with Docker Compose
-- Streaming conversation experience
+- Latency reports and component-degradation status endpoints
 
 ## System workflow
 
-1. Capture user voice input
-2. Convert and process the request
-3. Retrieve relevant context
-4. Send the enriched prompt to the language model
-5. Stream the response back to the user
-6. Continue the conversation with context
+1. Submit text or an audio file in Streamlit
+2. Transcribe audio when speech recognition is enabled
+3. Send the prompt to the configured language model
+4. Optionally synthesize speech from the response
+5. Return response text and optional generated audio
 
 ## Architecture
 
-![RAG architecture](rag%20for%20multimodel%20assistant%20voice.png)
+![Concept diagram for a retrieval-augmented voice assistant](rag%20for%20multimodel%20assistant%20voice.png)
 
 ![Voice assistant architecture](rag%20for%20multimodel%20voice%20assistant.png)
 
 ## Getting started
 
-Clone the repository, configure the required model or service environment variables, and start the application with Docker Compose.
+Clone the repository, configure the required model or service environment variables, and start the application with Docker Compose. Set `CORS_ALLOW_ORIGINS` to a comma-separated list of trusted browser origins when the UI is hosted away from the local Compose defaults (`http://localhost:8501,http://127.0.0.1:8501`). The Streamlit server calls the API server-side, so browser CORS is not required for that path. CORS is not authentication; do not expose the API publicly without an appropriate access-control layer.
 
 Clone URL: https://github.com/kalyan870/realtime-multimodal-app.git
 Run: docker compose up --build
@@ -41,11 +40,11 @@ Review the project configuration files before running the assistant and keep API
 
 ## Tech focus
 
-Multimodal AI • Voice Interfaces • OpenRouter LLMs • RAG • Docker Compose • Real-Time Applications
+Voice Interfaces • Speech Recognition • OpenRouter and NVIDIA LLM APIs • Docker Compose • FastAPI
 
 ## Project status
 
-This project is actively evolving as I improve response quality, retrieval, streaming behavior, and the overall voice experience.
+This project is actively evolving as I improve response quality, component reliability, and the overall voice experience.
 
 ## Author
 

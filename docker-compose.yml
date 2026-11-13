@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   backend:
     build: ./backend
@@ -10,6 +8,7 @@ services:
       - NVIDIA_API_KEY=${NVIDIA_API_KEY:-}
       - LLM_PROVIDER=${LLM_PROVIDER:-nvidia}
       - LLM_MODEL=${LLM_MODEL:-meta/llama-3.1-70b-instruct}
+      - CORS_ALLOW_ORIGINS=${CORS_ALLOW_ORIGINS:-http://localhost:8501,http://127.0.0.1:8501}
       - STT_TIMEOUT=15
       - LLM_TIMEOUT=20
       - TTS_TIMEOUT=15
