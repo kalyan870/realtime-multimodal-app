@@ -1,6 +1,6 @@
 import unittest
 
-from app.main import app
+from app.main import MAX_AUDIO_UPLOAD_BYTES, UploadTooLargeError, app, read_audio_upload
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -50,6 +50,28 @@ class CorsPolicyTests(unittest.IsolatedAsyncioTestCase):
         cors = next(item for item in app.user_middleware if item.cls is CORSMiddleware)
         self.assertNotIn("*", cors.kwargs["allow_origins"])
         self.assertFalse(cors.kwargs["allow_credentials"])
+
+
+class UploadLimitTests(unittest.IsolatedAsyncioTestCase):
+    async def test_upload_read_is_capped_at_limit_plus_one_byte(self):
+        class OversizedUpload:
+            requested_size = None
+
+            async def read(self, size):
+                self.requested_size = size
+                return b"x" * size
+
+        upload = OversizedUpload()
+        with self.assertRaises(UploadTooLargeError):
+            await read_audio_upload(upload)
+        self.assertEqual(upload.requested_size, MAX_AUDIO_UPLOAD_BYTES + 1)
+
+    async def test_upload_within_limit_is_preserved(self):
+        class SmallUpload:
+            async def read(self, size):
+                return b"audio-bytes"
+
+        self.assertEqual(await read_audio_upload(SmallUpload()), b"audio-bytes")
 
 
 if __name__ == "__main__":

@@ -10,6 +10,8 @@ from .config import settings
 from .pipeline.orchestrator import process_pipeline, get_latency_report, get_degradation_status
 from .pipeline.latency_budget import STAGE_BUDGETS, STAGE_LABELS, TOTAL_BUDGET
 
+MAX_AUDIO_UPLOAD_BYTES = 10 * 1024 * 1024
+
 app = FastAPI(title="Real-Time Multimodal App")
 
 app.add_middleware(
@@ -63,14 +65,25 @@ def degradation_status():
     return status
 
 
+class UploadTooLargeError(Exception):
+    pass
+
+
+async def read_audio_upload(file: UploadFile) -> bytes:
+    contents = await file.read(MAX_AUDIO_UPLOAD_BYTES + 1)
+    if len(contents) > MAX_AUDIO_UPLOAD_BYTES:
+        raise UploadTooLargeError
+    return contents
+
+
 @app.post("/process")
 async def process(file: UploadFile = File(None), text: str = Form(None)):
     audio_bytes = None
     if file and file.filename:
-        contents = await file.read()
-        if len(contents) > 10 * 1024 * 1024:
+        try:
+            audio_bytes = await read_audio_upload(file)
+        except UploadTooLargeError:
             return JSONResponse(status_code=413, content={"error": "File too large (max 10MB)"})
-        audio_bytes = contents
 
     result = process_pipeline(audio_bytes=audio_bytes, text_input=text)
     return result
