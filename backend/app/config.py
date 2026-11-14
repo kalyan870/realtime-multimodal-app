@@ -22,6 +22,14 @@ class Settings:
     ENABLE_STT: bool = os.environ.get("ENABLE_STT", "true").lower() == "true"
     ENABLE_TTS: bool = os.environ.get("ENABLE_TTS", "true").lower() == "true"
     ENABLE_LLM: bool = os.environ.get("ENABLE_LLM", "true").lower() == "true"
+    CORS_ALLOW_ORIGINS: list[str] = [
+        origin.strip()
+        for origin in os.environ.get(
+            "CORS_ALLOW_ORIGINS",
+            "http://localhost:8501,http://127.0.0.1:8501",
+        ).split(",")
+        if origin.strip()
+    ]
 
 
 settings = Settings()
