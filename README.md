@@ -1,6 +1,7 @@
 # Real-Time Multimodal Voice Assistant
 
 An interactive voice-and-text assistant built with a Streamlit UI and FastAPI backend. It can use Hugging Face speech recognition, an OpenRouter or NVIDIA language model, and gTTS speech synthesis.
+**Live link:** [https://saragadamkalyan-realtime-multimodal-frontend.hf.space/](https://saragadamkalyan-realtime-multimodal-frontend.hf.space/)
 
 ## Overview
 
@@ -24,6 +25,11 @@ The current implementation accepts text or an uploaded audio file, optionally tr
 5. Return response text and optional generated audio
 
 ## Architecture
+
+![realtime-multimodal-app architecture map](docs/images/realtime-multimodal-app-architecture.png)
+
+[Architecture notes](docs/architecture.md) · [Editable SVG](docs/images/realtime-multimodal-app-architecture.svg)
+
 
 ![Concept diagram for a retrieval-augmented voice assistant](rag%20for%20multimodel%20assistant%20voice.png)
 
